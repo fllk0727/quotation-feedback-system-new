@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "routes": [
+    { "src": "/api/feedback", "dest": "/api/feedback.js" },
+    { "src": "/api/submit-high", "dest": "/api/submit-high.js" }
+  ]
+}

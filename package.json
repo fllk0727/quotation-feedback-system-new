@@ -1,0 +1,13 @@
+{
+  "name": "quotation-feedback",
+  "version": "1.0.0",
+  "description": "Quotation Feedback System for Vercel",
+  "main": "api/feedback.js",
+  "scripts": {
+    "start": "node sendMail.js"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.0",
+    "dotenv": "^16.0.0"
+  }
+}

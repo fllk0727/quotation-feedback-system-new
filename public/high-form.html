@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotation Feedback - High Price</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; background-color: #f6f8fa; color: #24292f; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .card { background: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); max-width: 400px; width: 100%; }
+        h3 { margin-top: 0; color: #1f2328; }
+        p { color: #57606a; font-size: 14px; }
+        input { width: 100%; padding: 10px; border: 1px solid #d0d7de; border-radius: 6px; box-sizing: border-box; margin: 10px 0 20px 0; font-size: 14px; }
+        button { background-color: #2b6cb0; color: white; border: none; width: 100%; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; }
+        button:hover { background-color: #2c5282; }
+    </style>
+</head>
+<body>
+<div class="card" id="form-card">
+    <h3>Quotation Feedback</h3>
+    <p>您选择了 <strong>High Price</strong>。请问高出您的目标价多少百分比 (%)？</p>
+    <form id="highForm">
+        <input type="hidden" id="rfq" name="rfq">
+        <label style="font-weight:600;font-size:14px;">Higher than target price by (%):</label>
+        <input type="text" name="price_diff" placeholder="例如: 5 或 10" required>
+        <button type="submit">Submit Feedback</button>
+    </form>
+</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    document.getElementById('rfq').value = urlParams.get('rfq') || 'RFQ-44411';
+
+    document.getElementById('highForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+            const res = await fetch('/api/submit-high', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            if(result.success) {
+                document.getElementById('form-card').innerHTML = `<h2 style="color:#2ea44f;text-align:center;">Thank You!</h2><p style="text-align:center;">您的反馈与价格差距已成功提交，谢谢！</p>`;
+            } else {
+                alert('提交失败，请重试');
+            }
+        } catch (err) {
+            alert('网络请求失败');
+        }
+    });
+</script>
+</body>
+</html>
